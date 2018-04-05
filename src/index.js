@@ -11,6 +11,13 @@ ReactDOM.render(
   <div>
     <PriceInfo />
     <PriceGraph />
+    <h6 className="text-center text-secondary">
+      Spot price data provided by{' '}
+      <a href="https://www.coinbase.com/">Coinbase.</a>
+    </h6>
+    <h6 className="text-center text-secondary">
+      Chart data provided by <a href="https://poloniex.com/">Poloniex.</a>
+    </h6>
   </div>,
   document.getElementById('root')
 );
