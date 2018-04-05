@@ -26,77 +26,53 @@ class PriceGraph extends Component {
   componentDidMount() {
     const etherURL =
       'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=86400';
-
-    axios
-      .get(etherURL, {})
-      .then(res => {
-        const data = _.map(res.data);
-        const formattedData = data.map(a => ({
-          date: moment.unix(+a.date).format('M/DD'),
-          close: _.ceil(+a.close, 2)
-        }));
-        this.setState({ formattedData });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  handleEtherClick() {
-    const etherURL =
-      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=86400';
-
-    axios
-      .get(etherURL, {})
-      .then(res => {
-        const data = _.map(res.data);
-        const formattedData = data.map(a => ({
-          date: moment.unix(+a.date).format('M/DD'),
-          close: _.ceil(+a.close, 2)
-        }));
-        this.setState({ formattedData });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  handleBitcoinClick() {
     const bitcoinURL =
       'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BTC&start=1514764800&end=9999999999&period=86400';
-
-    axios
-      .get(bitcoinURL, {})
-      .then(res => {
-        const data = _.map(res.data);
-        const formattedData = data.map(a => ({
-          date: moment.unix(+a.date).format('M/DD'),
-          close: _.ceil(+a.close, 2)
-        }));
-        this.setState({ formattedData });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  handleBitcoinCashClick() {
     const bitcoinCashURL =
       'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BCH&start=1514764800&end=9999999999&period=86400';
 
     axios
-      .get(bitcoinCashURL, {})
-      .then(res => {
-        const data = _.map(res.data);
-        const formattedData = data.map(a => ({
-          date: moment.unix(+a.date).format('M/DD'),
-          close: _.ceil(+a.close, 2)
-        }));
-        this.setState({ formattedData });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      .all([
+        axios.get(etherURL, {}),
+        axios.get(bitcoinURL, {}),
+        axios.get(bitcoinCashURL, {})
+      ])
+      .then(
+        axios.spread((etherRes, bitcoinRes, bitcoinCashRes) => {
+          const etherData = _.map(etherRes.data);
+          const formattedEtherData = etherData.map(a => ({
+            date: moment.unix(+a.date).format('M/DD'),
+            close: _.ceil(+a.close, 2)
+          }));
+          this.setState({ formattedEtherData });
+
+          const bitcoinData = _.map(bitcoinRes.data);
+          const formattedBitcoinData = bitcoinData.map(a => ({
+            date: moment.unix(+a.date).format('M/DD'),
+            close: _.ceil(+a.close, 2)
+          }));
+          this.setState({ formattedBitcoinData });
+
+          const bitcoinCashData = _.map(bitcoinCashRes.data);
+          const formattedBitcoinCashData = bitcoinCashData.map(a => ({
+            date: moment.unix(+a.date).format('M/DD'),
+            close: _.ceil(+a.close, 2)
+          }));
+          this.setState({ formattedBitcoinCashData });
+        })
+      );
+  }
+
+  handleEtherClick() {
+    this.setState({ formattedData: this.state.formattedEtherData });
+  }
+
+  handleBitcoinClick() {
+    this.setState({ formattedData: this.state.formattedBitcoinData });
+  }
+
+  handleBitcoinCashClick() {
+    this.setState({ formattedData: this.state.formattedBitcoinCashData });
   }
 
   render() {

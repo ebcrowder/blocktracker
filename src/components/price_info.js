@@ -14,52 +14,29 @@ class PriceInfo extends Component {
     const bitcoinCashURL = 'https://api.coinbase.com/v2/prices/BCH-USD/spot';
 
     axios
-      .get(etherURL, {
-        headers: {
-          'CB-VERSION': '2018-02-06'
-        }
-      })
-      .then(res => {
-        const etherPrice = parseInt(res.data.data.amount, 10)
-          .toFixed(2)
-          .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-        this.setState({ etherPrice });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      .all([
+        axios.get(etherURL, { headers: { 'CB-VERSION': '2018-02-06' } }),
+        axios.get(bitcoinURL, { headers: { 'CB-VERSION': '2018-02-06' } }),
+        axios.get(bitcoinCashURL, { headers: { 'CB-VERSION': '2018-02-06' } })
+      ])
+      .then(
+        axios.spread((etherRes, bitcoinRes, bitcoinCashRes) => {
+          const etherPrice = parseInt(etherRes.data.data.amount, 10)
+            .toFixed(2)
+            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          this.setState({ etherPrice });
 
-    axios
-      .get(bitcoinURL, {
-        headers: {
-          'CB-VERSION': '2018-02-06'
-        }
-      })
-      .then(res => {
-        const bitcoinPrice = parseInt(res.data.data.amount, 10)
-          .toFixed(2)
-          .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-        this.setState({ bitcoinPrice });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+          const bitcoinPrice = parseInt(bitcoinRes.data.data.amount, 10)
+            .toFixed(2)
+            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          this.setState({ bitcoinPrice });
 
-    axios
-      .get(bitcoinCashURL, {
-        headers: {
-          'CB-VERSION': '2018-02-06'
-        }
-      })
-      .then(res => {
-        const bitcoinCashPrice = parseInt(res.data.data.amount, 10)
-          .toFixed(2)
-          .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-        this.setState({ bitcoinCashPrice });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+          const bitcoinCashPrice = parseInt(bitcoinCashRes.data.data.amount, 10)
+            .toFixed(2)
+            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          this.setState({ bitcoinCashPrice });
+        })
+      );
   }
 
   render() {
