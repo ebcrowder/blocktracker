@@ -101,7 +101,7 @@ class PriceGraph extends Component {
     return (
       <div className="container">
         <button
-          type="button"
+          type="button align-right"
           className="btn btn-outline-primary"
           onClick={this.handleEtherClick}
         >
