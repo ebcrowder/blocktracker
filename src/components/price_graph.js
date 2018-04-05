@@ -5,11 +5,13 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  Tooltip
+  Tooltip,
+  ResponsiveContainer
 } from 'recharts';
 import axios from 'axios';
 import _ from 'lodash';
 import moment from 'moment';
+import './price_graph.css';
 
 class PriceGraph extends Component {
   constructor(props) {
@@ -23,7 +25,7 @@ class PriceGraph extends Component {
 
   componentDidMount() {
     const etherURL =
-      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=14400';
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=86400';
 
     axios
       .get(etherURL, {})
@@ -42,7 +44,7 @@ class PriceGraph extends Component {
 
   handleEtherClick() {
     const etherURL =
-      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=14400';
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=86400';
 
     axios
       .get(etherURL, {})
@@ -61,7 +63,7 @@ class PriceGraph extends Component {
 
   handleBitcoinClick() {
     const bitcoinURL =
-      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BTC&start=1514764800&end=9999999999&period=14400';
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BTC&start=1514764800&end=9999999999&period=86400';
 
     axios
       .get(bitcoinURL, {})
@@ -80,7 +82,7 @@ class PriceGraph extends Component {
 
   handleBitcoinCashClick() {
     const bitcoinCashURL =
-      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BCH&start=1514764800&end=9999999999&period=14400';
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BCH&start=1514764800&end=9999999999&period=86400';
 
     axios
       .get(bitcoinCashURL, {})
@@ -98,8 +100,10 @@ class PriceGraph extends Component {
   }
 
   render() {
+    const tickFormatter = data =>
+      data.toLocaleString('us-EN', { style: 'currency', currency: 'USD' });
     return (
-      <div className="container">
+      <div className="container border border-primary rounded">
         <button
           type="button align-right"
           className="btn btn-outline-primary"
@@ -121,30 +125,34 @@ class PriceGraph extends Component {
         >
           Bitcoin Cash
         </button>
-        <AreaChart
-          width={1100}
-          height={400}
-          data={this.state.formattedData}
-          margin={{ top: 5, right: 20, bottom: 5, left: 5 }}
-        >
-          <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#0000ff" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#0000ff" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="close"
-            stroke="#82ca9d"
-            fillOpacity={1}
-            fill="url(#colorUv)"
-          />
-        </AreaChart>
+        <div className="graph">
+          <ResponsiveContainer height={500} width="95%">
+            <AreaChart
+              width={1400}
+              height={500}
+              data={this.state.formattedData}
+              margin={{ top: 5, right: 5, bottom: 5, left: 35 }}
+            >
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#0000ff" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#0000ff" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+              <XAxis dataKey="date" interval={15} />
+              <YAxis tickFormatter={tickFormatter} type="number" />
+              <Tooltip formatter={tickFormatter} />
+              <Area
+                type="monotone"
+                dataKey="close"
+                stroke="#82ca9d"
+                fillOpacity={1}
+                fill="url(#colorUv)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     );
   }

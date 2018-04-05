@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './price_info.css';
 
 class PriceInfo extends Component {
   constructor(props) {
@@ -65,15 +66,16 @@ class PriceInfo extends Component {
     return (
       <div className="container text-center">
         <div className="row">
-          <div className="col-sm">
-            ethereum spot price
+          <div className="col-sm border border-primary rounded">
+            Ethereum (ETH) spot price
             <h1>${this.state.etherPrice}</h1>
           </div>
-          <div className="col-sm">
-            btc spot price <h1>${this.state.bitcoinPrice}</h1>
+          <div className="col-sm border border-primary rounded">
+            Bitcoin (BTC) spot price <h1>${this.state.bitcoinPrice}</h1>
           </div>
-          <div className="col-sm">
-            btc cash spot price <h1>${this.state.bitcoinCashPrice}</h1>
+          <div className="col-sm border border-primary rounded">
+            Bitcoin Cash (BCH) spot price
+            <h1>${this.state.bitcoinCashPrice}</h1>
           </div>
         </div>
       </div>
