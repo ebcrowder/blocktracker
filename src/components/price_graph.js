@@ -16,14 +16,17 @@ class PriceGraph extends Component {
     super(props);
 
     this.state = {};
+    this.handleEtherClick = this.handleEtherClick.bind(this);
+    this.handleBitcoinClick = this.handleBitcoinClick.bind(this);
+    this.handleBitcoinCashClick = this.handleBitcoinCashClick.bind(this);
   }
 
   componentDidMount() {
-    const URL =
+    const etherURL =
       'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=14400';
 
     axios
-      .get(URL, {})
+      .get(etherURL, {})
       .then(res => {
         const data = _.map(res.data);
         const formattedData = data.map(a => ({
@@ -36,17 +39,87 @@ class PriceGraph extends Component {
         console.log(error);
       });
   }
+
+  handleEtherClick() {
+    const etherURL =
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_ETH&start=1514764800&end=9999999999&period=14400';
+
+    axios
+      .get(etherURL, {})
+      .then(res => {
+        const data = _.map(res.data);
+        const formattedData = data.map(a => ({
+          date: moment.unix(+a.date).format('M/DD'),
+          close: _.ceil(+a.close, 2)
+        }));
+        this.setState({ formattedData });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  handleBitcoinClick() {
+    const bitcoinURL =
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BTC&start=1514764800&end=9999999999&period=14400';
+
+    axios
+      .get(bitcoinURL, {})
+      .then(res => {
+        const data = _.map(res.data);
+        const formattedData = data.map(a => ({
+          date: moment.unix(+a.date).format('M/DD'),
+          close: _.ceil(+a.close, 2)
+        }));
+        this.setState({ formattedData });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  handleBitcoinCashClick() {
+    const bitcoinCashURL =
+      'https://poloniex.com/public?command=returnChartData&currencyPair=USDT_BCH&start=1514764800&end=9999999999&period=14400';
+
+    axios
+      .get(bitcoinCashURL, {})
+      .then(res => {
+        const data = _.map(res.data);
+        const formattedData = data.map(a => ({
+          date: moment.unix(+a.date).format('M/DD'),
+          close: _.ceil(+a.close, 2)
+        }));
+        this.setState({ formattedData });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div className="container">
-        <button type="button" class="btn btn-primary">
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={this.handleEtherClick}
+        >
           Ethereum
         </button>
-        <button type="button" class="btn btn-primary">
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={this.handleBitcoinClick}
+        >
           Bitcoin
         </button>
-        <button type="button" class="btn btn-primary">
-          Litecoin
+        <button
+          type="button"
+          className="btn btn-outline-primary"
+          onClick={this.handleBitcoinCashClick}
+        >
+          Bitcoin Cash
         </button>
         <AreaChart
           width={1100}
