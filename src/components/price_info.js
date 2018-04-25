@@ -21,20 +21,26 @@ class PriceInfo extends Component {
       ])
       .then(
         axios.spread((etherRes, bitcoinRes, bitcoinCashRes) => {
-          const etherPrice = parseInt(etherRes.data.data.amount, 10)
-            .toFixed(2)
-            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-          this.setState({ etherPrice });
+          const etherPrice = etherRes.data.data.amount;
+          const formattedEtherPrice = etherPrice.replace(
+            /(\d)(?=(\d{3})+\.)/g,
+            '$1,'
+          );
+          this.setState({ formattedEtherPrice });
 
-          const bitcoinPrice = parseInt(bitcoinRes.data.data.amount, 10)
-            .toFixed(2)
-            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-          this.setState({ bitcoinPrice });
+          const bitcoinPrice = bitcoinRes.data.data.amount;
+          const formattedBitcoinPrice = bitcoinPrice.replace(
+            /(\d)(?=(\d{3})+\.)/g,
+            '$1,'
+          );
+          this.setState({ formattedBitcoinPrice });
 
-          const bitcoinCashPrice = parseInt(bitcoinCashRes.data.data.amount, 10)
-            .toFixed(2)
-            .replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-          this.setState({ bitcoinCashPrice });
+          const bitcoinCashPrice = bitcoinCashRes.data.data.amount;
+          const formattedBitcoinCashPrice = bitcoinCashPrice.replace(
+            /(\d)(?=(\d{3})+\.)/g,
+            '$1,'
+          );
+          this.setState({ formattedBitcoinCashPrice });
         })
       );
   }
@@ -44,15 +50,16 @@ class PriceInfo extends Component {
       <div className="container text-center">
         <div className="row">
           <div className="col-sm border border-primary rounded">
-            Ethereum (ETH) spot price
-            <h1>${this.state.etherPrice}</h1>
+            Ethereum (ETH) current spot price
+            <h1>${this.state.formattedEtherPrice}</h1>
           </div>
           <div className="col-sm border border-primary rounded">
-            Bitcoin (BTC) spot price <h1>${this.state.bitcoinPrice}</h1>
+            Bitcoin (BTC) current spot price{' '}
+            <h1>${this.state.formattedBitcoinPrice}</h1>
           </div>
           <div className="col-sm border border-primary rounded">
-            Bitcoin Cash (BCH) spot price
-            <h1>${this.state.bitcoinCashPrice}</h1>
+            Bitcoin Cash (BCH) current spot price
+            <h1>${this.state.formattedBitcoinCashPrice}</h1>
           </div>
         </div>
       </div>
