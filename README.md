@@ -5,7 +5,6 @@
 Ethereum and Bitcoin price history graph detailing current spot price of Ethereum, Bitcoin and Bitcoin Cash. Additionally, the application features a graph showing the year-to-date trends of each virtual currency via button selections. Graph provides spot price by close date via hover tooltip. 
 
 ![alt text](/block.jpg?raw=true "Index")
-_Index of posts._
 
 ## Built With
 
